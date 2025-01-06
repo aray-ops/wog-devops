@@ -1,9 +1,8 @@
-from app import welcome, start_play
+from app import GameApp
 
 def main():
-    username = input("Enter your name: ")
-    welcome(username)
-    start_play()
+    game = GameApp()
+    game.start()
 
 if __name__ == "__main__":
     main()
