@@ -11,10 +11,10 @@ def get_money_interval(difficulty, usd_amount):
         exact_value = usd_amount * usd_to_ils_rate
         # Calculate interval based on difficulty
         interval = 10 - difficulty
-        return exact_value - interval, exact_value + interval
+        return exact_value - interval, exact_value + interval, exact_value
     except Exception as e:
         print(f"Error getting exchange rate: {e}")
-        return None, None
+        return None, None, None
 
 def get_guess_from_user(usd_amount):
     """Get user's guess for the value in ILS"""
@@ -28,18 +28,22 @@ def get_guess_from_user(usd_amount):
         except ValueError:
             print("Please enter a valid number.")
 
+def compare_results(guess, lower_bound, upper_bound):
+    """Compare if the guess is within the valid interval"""
+    return lower_bound <= guess <= upper_bound
+
 def play(difficulty):
     """Main game function"""
     # Generate random USD amount between 1-100
     usd_amount = random.randint(1, 100)
     
     # Get interval
-    lower_bound, upper_bound = get_money_interval(difficulty, usd_amount)
+    lower_bound, upper_bound, exact_value = get_money_interval(difficulty, usd_amount)
     if lower_bound is None:
         return False
     
     # Get user's guess
     user_guess = get_guess_from_user(usd_amount)
     
-    # Check if guess is within interval
-    return lower_bound <= user_guess <= upper_bound
+    # Use compare_results function to check if guess is within interval
+    return compare_results(user_guess, lower_bound, upper_bound)
